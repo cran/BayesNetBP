@@ -39,14 +39,9 @@ parameters for each Gaussian distribution in the mixture, which are
 \examples{
 
 data(liver)
-cst <- ClusterTreeCompile(dag=liver$dag, node.class=liver$node.class)
-models <- LocalModelCompile(data=liver$data, dag=liver$dag, node.class=liver$node.class)
-tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-                                dag=cst$dag, 
-                                model=models, 
-                                node.sets=cst$cluster.sets, 
-                                node.class=cst$node.class)
-tree.init.p <- PropagateDBN(tree.init)
+tree.init.p <- Initializer(dag=liver$dag, data=liver$data, 
+                           node.class=liver$node.class, 
+                           propagate = TRUE)
 tree.post <- AbsorbEvidence(tree.init.p, c("Nr1i3", "chr1_42.65"), list(1,"1"))
 marg <- Marginals(tree.post, c("HDL", "Ppap2a"))
 marg$marginals$HDL

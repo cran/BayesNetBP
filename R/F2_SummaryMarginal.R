@@ -19,14 +19,9 @@
 #' @examples 
 #' 
 #' data(liver)
-#' cst <- ClusterTreeCompile(dag=liver$dag, node.class=liver$node.class)
-#' models <- LocalModelCompile(data=liver$data, dag=liver$dag, node.class=liver$node.class)
-#' tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-#'                                 dag=cst$dag, 
-#'                                 model=models, 
-#'                                 node.sets=cst$cluster.sets, 
-#'                                 node.class=cst$node.class)
-#' tree.init.p <- PropagateDBN(tree.init)
+#' tree.init.p <- Initializer(dag=liver$dag, data=liver$data, 
+#'                            node.class=liver$node.class, 
+#'                            propagate = TRUE)
 #' marg <- Marginals(tree.init.p, c("HDL", "Ppap2a", "Neu1"))
 #' SummaryMarginals(marginals=marg)
 #' 

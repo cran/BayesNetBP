@@ -4,7 +4,7 @@
 \alias{ComputeKLDs}
 \title{Compute signed and symmetric Kullback-Leibler divergence}
 \usage{
-ComputeKLDs(tree, var0, vars, seq, pbar = TRUE)
+ComputeKLDs(tree, var0, vars, seq, pbar = TRUE, method = "gaussian")
 }
 \arguments{
 \item{tree}{a \code{\linkS4class{ClusterTree}} object}
@@ -16,6 +16,9 @@ ComputeKLDs(tree, var0, vars, seq, pbar = TRUE)
 \item{seq}{a \code{vector} of numeric values as the evidences}
 
 \item{pbar}{\code{logical(1)} whether to show progress bar}
+
+\item{method}{method for divergence computation:
+\code{gaussian} for Gaussian approximation, \code{} for Monte Carlo integration}
 }
 \value{
 a \code{data.frame} of the divergence
@@ -31,14 +34,9 @@ continuous variables.
 \examples{
 \dontrun{
 data(liver)
-cst <- ClusterTreeCompile(dag=liver$dag, node.class=liver$node.class)
-models <- LocalModelCompile(data=liver$data, dag=liver$dag, node.class=liver$node.class)
-tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-                                dag=cst$dag, 
-                                model=models, 
-                                node.sets=cst$cluster.sets, 
-                                node.class=cst$node.class)
-tree.init.p <- PropagateDBN(tree.init)
+tree.init.p <- Initializer(dag=liver$dag, data=liver$data, 
+                           node.class=liver$node.class, 
+                           propagate = TRUE)
 klds <- ComputeKLDs(tree=tree.init.p, var0="Nr1i3", 
                     vars=setdiff(tree.init.p@node, "Nr1i3"),
                     seq=seq(-3,3,0.5))

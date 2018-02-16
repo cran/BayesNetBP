@@ -14,20 +14,16 @@
 #' @examples 
 #' 
 #' data(liver)
-#' cst <- ClusterTreeCompile(dag=liver$dag, node.class=liver$node.class)
-#' models <- LocalModelCompile(data=liver$data, dag=liver$dag, node.class=liver$node.class)
-#' tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-#'                                 dag=cst$dag, 
-#'                                 model=models, 
-#'                                 node.sets=cst$cluster.sets, 
-#'                                 node.class=cst$node.class)
+#' tree.init <- Initializer(dag=liver$dag, data=liver$data, 
+#'                          node.class=liver$node.class, 
+#'                          propagate = FALSE)
 #' tree.init@propagated
-#' tree.init.p <- PropagateDBN(tree.init)
+#' tree.init.p <- Propagate(tree.init)
 #' tree.init.p@propagated
 #'
 #' @export
 
-PropagateDBN <- function(tree) {
+Propagate <- function(tree) {
   
   discrete.clusters <- tree@cluster[tree@cluster.class]
   
@@ -46,7 +42,7 @@ PropagateDBN <- function(tree) {
   tree.sub.graph <- induced_subgraph(tree.graph, discrete.clusters)
   potentials.sub <- tree@cpt[discrete.clusters]
   discrete.sets <- tree@member[discrete.clusters]
-  tree@jpt <- Propagate(tree.sub.graph, potentials.sub, discrete.sets)
+  tree@jpt <- propagate.worker(tree.sub.graph, potentials.sub, discrete.sets)
   tree@propagated <- TRUE
   return(tree)
   

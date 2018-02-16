@@ -11,6 +11,8 @@
 #' @param vars the variables to have divergence computed
 #' @param seq a \code{vector} of numeric values as the evidences
 #' @param pbar \code{logical(1)} whether to show progress bar
+#' @param method method for divergence computation:
+#' \code{gaussian} for Gaussian approximation, \code{} for Monte Carlo integration
 #' @return a \code{data.frame} of the divergence
 #' 
 #' @author Han Yu
@@ -18,14 +20,9 @@
 #' @examples 
 #' \dontrun{
 #' data(liver)
-#' cst <- ClusterTreeCompile(dag=liver$dag, node.class=liver$node.class)
-#' models <- LocalModelCompile(data=liver$data, dag=liver$dag, node.class=liver$node.class)
-#' tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-#'                                 dag=cst$dag, 
-#'                                 model=models, 
-#'                                 node.sets=cst$cluster.sets, 
-#'                                 node.class=cst$node.class)
-#' tree.init.p <- PropagateDBN(tree.init)
+#' tree.init.p <- Initializer(dag=liver$dag, data=liver$data, 
+#'                            node.class=liver$node.class, 
+#'                            propagate = TRUE)
 #' klds <- ComputeKLDs(tree=tree.init.p, var0="Nr1i3", 
 #'                     vars=setdiff(tree.init.p@node, "Nr1i3"),
 #'                     seq=seq(-3,3,0.5))
@@ -33,7 +30,9 @@
 #' }
 #' @export
 
-ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE) {
+ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE, method = "gaussian") {
+  
+  # cat(method, "\n")
   
   node.class <- tree@node.class
   tree.graph <- tree@graph$tree
@@ -60,7 +59,8 @@ ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE) {
     for(j in 1:n.v){
       klds[i,j] <- SymmetricKLD(posteriors.1$marginals[[j]], 
                                 posteriors.2$marginals[[j]], 
-                                discrete = node.class[vars[j]])
+                                discrete = node.class[vars[j]],
+                                method = method) ######
     }
     
     if(pbar){

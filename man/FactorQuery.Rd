@@ -33,18 +33,13 @@ data(chest)
 dag <- chest$dag
 node.class <- rep(TRUE, length(dag@nodes))
 names(node.class) <- dag@nodes
-cst <- ClusterTreeCompile(dag, node.class)
-models <- LocalModelCompile(chest$data, dag, node.class)
-tree.init <- ElimTreeInitialize(tree=cst$tree.graph, 
-                                dag=cst$dag, 
-                                model=models, 
-                                node.sets=cst$cluster.sets, 
-                                node.class=cst$node.class)
-tree.init.p <- PropagateDBN(tree.init)
-# get joint distribution
+tree.init.p <- Initializer(dag=dag, data=chest$data, 
+                           node.class=node.class, 
+                           propagate=TRUE)
+# joint distribution
 FactorQuery(tree=tree.init.p, vars=c("tub", "xray", "dysp", "asia"), mode="joint")
 
-# get joint distribution
+# conditional distribution
 FactorQuery(tree=tree.init.p, vars=c("xray"), mode="conditional")
 
 }
