@@ -35,7 +35,8 @@ shinyServer(function(input, output, session) {
   ## Initial plot setting
   ##########################################
   
-  edgeData <- data.frame(matrix(unlist(gRbase::edgeList(dag)), ncol=2, byrow=TRUE))
+  # edgeData <- data.frame(matrix(unlist(edgeList(dag)), ncol=2, byrow=TRUE)) ##############
+  edgeData <- data.frame(edgeList.bnbp(dag))                                       ##############
   names(edgeData) <- c("source", "target")
   name <- id <- tree.init.p@node
   nodeData <- data.frame(id, name, stringsAsFactors=FALSE)
@@ -209,12 +210,12 @@ shinyServer(function(input, output, session) {
       this.node <- v$sub_sel[i]
       
       if (input$direct=="in") {
-        temp <- union(temp, gRbase::parents(this.node, v$tree.init@graph$dag))
+        temp <- union(temp, parents.bnbp(this.node, v$tree.init@graph$dag))   ###############
       } else if (input$direct=="out") {
-        temp <- union(temp, gRbase::children(this.node, v$tree.init@graph$dag))
+        temp <- union(temp, children.bnbp(this.node, v$tree.init@graph$dag))  ###############
       } else {
-        temp <- union(temp, gRbase::parents(this.node, v$tree.init@graph$dag))
-        temp <- union(temp, gRbase::children(this.node, v$tree.init@graph$dag))
+        temp <- union(temp, parents.bnbp(this.node, v$tree.init@graph$dag))   ###############
+        temp <- union(temp, children.bnbp(this.node, v$tree.init@graph$dag))  ###############
       }
       
       
@@ -339,7 +340,8 @@ shinyServer(function(input, output, session) {
     dag <- v$tree.init@graph$dag
     node.class <- v$tree.init@node.class
     
-    edgeData <- data.frame(matrix(unlist(gRbase::edgeList(dag)), ncol=2, byrow=TRUE))
+    # edgeData <- data.frame(matrix(unlist(edgeList(dag)), ncol=2, byrow=TRUE)) ##############
+    edgeData <- data.frame(edgeList.bnbp(dag))                                       ##############
     names(edgeData) <- c("source", "target")
     name <- id <- v$tree.init@node
     nodeData <- data.frame(id, name, stringsAsFactors=FALSE)
@@ -431,5 +433,24 @@ color.generator <- function(klds) {
   return(fill.post)
   
 }
+
+
+edgeList.bnbp <- function(dag) {
+  dag.graph <- igraph.from.graphNEL(dag)
+  return(igraph::as_edgelist(dag.graph))
+}
+
+parents.bnbp <- function(node, dag) {
+  dag.graph <- igraph.from.graphNEL(dag)
+  pa <- names(neighbors(dag.graph, node, mode="in"))
+  return(pa)
+}
+
+children.bnbp <- function(node, dag) {
+  dag.graph <- igraph.from.graphNEL(dag)
+  ch <- names(neighbors(dag.graph, node, mode="out"))
+  return(ch)
+}
+
 
 
