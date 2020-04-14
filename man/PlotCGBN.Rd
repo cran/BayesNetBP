@@ -26,22 +26,23 @@ a \code{vector} of signed symmetric Kullback-Leibler divergence
 Plot and compare two Bayesian networks with different evidence(s) absorbed and propagated.
 }
 \details{
-Network visualization of the node-specific differences between Bayesian Networks 
-with the same topology, but evidence that has been absorbed and propagated.  The change of 
-marginal distribution of each node is measured by signed and symmetric Kullback-Leibler 
-divergence.  The sign indicates the direction of change, with \code{tree.1} considered as the baseline.  
-The magnitude of the change is reflected by the value.  Nodes that are white are d-separated 
-from the evidence.
+Network visualization of the node-specific differences between Bayesian Networks
+with the same topology, but evidence that has been absorbed and propagated.  The change of
+marginal distribution of each node is measured by signed and symmetric Kullback-Leibler
+divergence.  The sign indicates the direction of change, with \code{tree.1} considered as the baseline.
+The magnitude of the change is reflected by the value.  Nodes that are white are d-separated
+from the evidence. This function requires \code{Rgraphviz} package.
 }
 \examples{
 \dontrun{
+library("Rgraphviz")
 data(toytree)
 tree.post <- AbsorbEvidence(toytree, c("Nr1i3"), list(1))
 PlotCGBN(tree.1=toytree, tree.2=tree.post)
 }
 }
 \references{
-Cowell, R. G. (2005). Local propagation in conditional Gaussian Bayesian networks. 
+Cowell, R. G. (2005). Local propagation in conditional Gaussian Bayesian networks.
 Journal of Machine Learning Research, 6(Sep), 1517-1550.
 }
 \author{
