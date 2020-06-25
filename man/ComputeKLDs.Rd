@@ -34,14 +34,21 @@ continuous variables.
 \examples{
 \dontrun{
 data(liver)
-tree.init.p <- Initializer(dag=liver$dag, data=liver$data, 
-                           node.class=liver$node.class, 
+tree.init.p <- Initializer(dag=liver$dag, data=liver$data,
+                           node.class=liver$node.class,
                            propagate = TRUE)
-klds <- ComputeKLDs(tree=tree.init.p, var0="Nr1i3", 
+klds <- ComputeKLDs(tree=tree.init.p, var0="Nr1i3",
                     vars=setdiff(tree.init.p@node, "Nr1i3"),
                     seq=seq(-3,3,0.5))
 head(klds)
 }
+}
+\references{
+Cowell, R. G. (2005). Local propagation in conditional Gaussian Bayesian networks.
+Journal of Machine Learning Research, 6(Sep), 1517-1550. \cr
+\cr
+Yu H, Moharil J, Blair RH (2020). BayesNetBP: An R Package for Probabilistic Reasoning in Bayesian
+Networks. Journal of Statistical Software, 94(3), 1-31. <doi:10.18637/jss.v094.i03>.
 }
 \author{
 Han Yu
