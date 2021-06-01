@@ -14,6 +14,9 @@
 #' @param fontsize font size for the node labels
 #' @param pbar \code{logical(1)} whether to show progress bar
 #' @param plotting \code{logical(1)} whether to output plot
+#' @param epsilon \code{numeric(1)} the KL divergence is undefined if certain states of a discrete variable 
+#' have probabilities of 0. In this case, a small positive number epsilon is assigned as their probabilities for calculating
+#' the divergence. The probabilities of other states are shrunked proportionally to ensure they sum up to 1.
 #' @return a plot of Bayesian network
 #' @return a \code{vector} of signed symmetric Kullback-Leibler divergence
 #'
@@ -40,7 +43,7 @@
 #' }
 #' @export
 
-PlotCGBN <- function(tree.1, tree.2, fontsize=NULL, pbar=FALSE, plotting=TRUE) {
+PlotCGBN <- function(tree.1, tree.2, fontsize=NULL, pbar=FALSE, plotting=TRUE, epsilon = 10^-6) {
 
   # tree.1 <- tree.init.p; tree.2 <- tree.post; fontsize=NULL; pbar=TRUE; plotting=TRUE;
   dag <- tree.1@graph$dag
@@ -93,7 +96,8 @@ PlotCGBN <- function(tree.1, tree.2, fontsize=NULL, pbar=FALSE, plotting=TRUE) {
 
     post.1 <- Marginals(tree.1, all.active[i])
     post.2 <- Marginals(tree.2, all.active[i])
-    klds.0[i] <- SymmetricKLD(post.1[[1]][[1]], post.2[[1]][[1]], discrete = node.class[all.active[i]]) ##
+    klds.0[i] <- SymmetricKLD(post.1[[1]][[1]], post.2[[1]][[1]], 
+                              discrete = node.class[all.active[i]], epsilon = epsilon) ##
   }
   names(klds.0) <- all.active
   klds <- abs(klds.0)

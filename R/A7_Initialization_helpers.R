@@ -69,10 +69,11 @@ is.subset <- function(x,y){
 
 ############################################################
 ## Extract info from qtl fit results
+# The qtl and qtlnet are optional
+# @importFrom qtlnet loci.qtlnet
+# @importFrom qtl scanone
 ############################################################
 #' @importFrom graph nodes
-#' @importFrom qtlnet loci.qtlnet
-#' @importFrom qtl scanone
 #' @importFrom igraph is_dag
 extractQTL <- function(qtl.fit) {
 
@@ -105,7 +106,7 @@ extractQTL <- function(qtl.fit) {
   markers <- c()
 
   for(i in 1:nrow(qtl.df)) {
-    markers[i] <- find.marker(qtl, qtl.df$chr[i], qtl.df$location[i])
+    markers[i] <- qtl::find.marker(qtl, qtl.df$chr[i], qtl.df$location[i])
     geno.list[[i]] <-
       data.frame(qtl$geno[[qtl.df$chr[i]]]$data)[[markers[i]]]
   }

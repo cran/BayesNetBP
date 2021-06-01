@@ -30,7 +30,8 @@ Compile the local models
 \details{
 This function compiles the local models, including the conditional
 probability tables for discrete variables, and linear predictor potentials
-for continuous variables.
+for continuous variables. The qtlnet and qtl package need to be installed if data is
+a \code{qtlnet} object.
 }
 \examples{
 

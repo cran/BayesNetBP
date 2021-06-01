@@ -4,8 +4,8 @@
 #'
 #' @details This function compiles the local models, including the conditional
 #' probability tables for discrete variables, and linear predictor potentials
-#' for continuous variables.
-#'
+#' for continuous variables. The qtlnet and qtl package need to be installed if data is
+#' a \code{qtlnet} object.
 #'
 #' @param data a \code{data.frame} object or a \code{qtlnet} object
 #' @param dag \code{NULL} if data is \code{qtlnet} object, or a \code{graphNEL} object of conditional
@@ -23,8 +23,6 @@
 #' }
 #'
 #' @import doBy
-#' @importFrom qtl find.marker
-#' @importFrom qtl scanone
 #' @importFrom graph nodes
 #' @importFrom igraph igraph.options
 #' @author Han Yu
@@ -57,7 +55,8 @@ LocalModelCompile <- function(data, dag=NULL, node.class=NULL) {
   return(models)
 }
 
-
+# @importFrom qtl find.marker
+# @importFrom qtl scanone
 
 
 

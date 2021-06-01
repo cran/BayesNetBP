@@ -4,7 +4,14 @@
 \alias{PlotCGBN}
 \title{Plot the Bayesian network}
 \usage{
-PlotCGBN(tree.1, tree.2, fontsize = NULL, pbar = FALSE, plotting = TRUE)
+PlotCGBN(
+  tree.1,
+  tree.2,
+  fontsize = NULL,
+  pbar = FALSE,
+  plotting = TRUE,
+  epsilon = 10^-6
+)
 }
 \arguments{
 \item{tree.1}{a \code{\linkS4class{ClusterTree}}}
@@ -16,6 +23,10 @@ PlotCGBN(tree.1, tree.2, fontsize = NULL, pbar = FALSE, plotting = TRUE)
 \item{pbar}{\code{logical(1)} whether to show progress bar}
 
 \item{plotting}{\code{logical(1)} whether to output plot}
+
+\item{epsilon}{\code{numeric(1)} the KL divergence is undefined if certain states of a discrete variable 
+have probabilities of 0. In this case, a small positive number epsilon is assigned as their probabilities for calculating
+the divergence. The probabilities of other states are shrunked proportionally to ensure they sum up to 1.}
 }
 \value{
 a plot of Bayesian network

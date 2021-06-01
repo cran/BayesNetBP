@@ -13,6 +13,9 @@
 #' @param pbar \code{logical(1)} whether to show progress bar
 #' @param method method for divergence computation:
 #' \code{gaussian} for Gaussian approximation, \code{} for Monte Carlo integration
+#' @param epsilon \code{numeric(1)} the KL divergence is undefined if certain states of a discrete variable 
+#' have probabilities of 0. In this case, a small positive number epsilon is assigned as their probabilities for
+#' calculating the divergence. The probabilities of other states are shrunked proportionally to ensure they sum up to 1.
 #' @return a \code{data.frame} of the divergence
 #'
 #' @author Han Yu
@@ -36,7 +39,7 @@
 #' }
 #' @export
 
-ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE, method = "gaussian") {
+ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE, method = "gaussian", epsilon = 10^-6) {
 
   # cat(method, "\n")
 
@@ -66,7 +69,7 @@ ComputeKLDs <- function(tree, var0, vars, seq, pbar=TRUE, method = "gaussian") {
       klds[i,j] <- SymmetricKLD(posteriors.1$marginals[[j]],
                                 posteriors.2$marginals[[j]],
                                 discrete = node.class[vars[j]],
-                                method = method) ######
+                                method = method, epsilon = epsilon) ######
     }
 
     if(pbar){
