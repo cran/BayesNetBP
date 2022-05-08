@@ -55,18 +55,6 @@ assignUniverse <- function(dag, universes, nodes){
   return(assignment)
 }
 
-
-############################################################
-## a helper function for checking if x is a subset of y ####
-############################################################
-is.subset <- function(x,y){
-  if (length(setdiff(x,y))==0){
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
-}
-
 ############################################################
 ## Extract info from qtl fit results
 # The qtl and qtlnet are optional

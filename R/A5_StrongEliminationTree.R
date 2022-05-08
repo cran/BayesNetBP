@@ -2,8 +2,7 @@
 StrongEliminationTree <- function(cs, elim.order){
   
   # a vector to store the parent of each cluster
-  parentnodes <- c()
-
+  pvec <- c()
   
   # iterate over all clusters
   for (i in length(cs):1){
@@ -21,25 +20,23 @@ StrongEliminationTree <- function(cs, elim.order){
     names(eo.pos) <- cluster
     eo.pos <- eo.pos[eo.pos>elim.ind]
     if (length(eo.pos)>0) {
-      parentnodes[i] <- names(eo.pos)[which.min(eo.pos)]
+      pvec[i] <- names(eo.pos)[which.min(eo.pos)]
     }
-    
-    
   }
   
   # construct a graphNEL object of the strong elimination tree
   
-  names(parentnodes) <- names(cs)
+  names(pvec) <- names(cs)
   
-  nodes <- names(parentnodes)
+  nodes <- names(pvec)
   Adj <- matrix(0, length(nodes), length(nodes))
   colnames(Adj) <- nodes
   rownames(Adj) <- nodes
   
   cs.graph <- graph_from_adjacency_matrix(Adj, mode = "directed")
   for (i in 1:length(nodes)){
-    if(!is.na(parentnodes[i])){
-      cs.graph <- add_edges(cs.graph, c(parentnodes[i], nodes[i]))
+    if(!is.na(pvec[i])){
+      cs.graph <- add_edges(cs.graph, c(pvec[i], nodes[i]))
     }
   }
   

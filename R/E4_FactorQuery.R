@@ -56,7 +56,7 @@ FactorQuery <- function(tree, vars=c(), mode=c("joint", "conditional", "list")) 
     result <- list()
     j <- 1
     for (i in 1:length(tree@jpt)) {
-      if(is.subset(vars, colnames(tree@jpt[[i]]$cpt))) {
+      if(all(vars %in% colnames(tree@jpt[[i]]$cpt))) {
         result[[j]] <- colnames(tree@jpt[[i]]$cpt)
         j <- j+1
       }
@@ -74,7 +74,7 @@ FactorQuery <- function(tree, vars=c(), mode=c("joint", "conditional", "list")) 
     parents <- setdiff(parents, tree@absorbed.variables)
     allvar <- c(vars, parents)
     for (i in 1:length(tree@jpt)){
-      if(is.subset(allvar, colnames(tree@jpt[[i]]$cpt))) {
+      if(all(allvar %in% colnames(tree@jpt[[i]]$cpt))) {
         pot <- tree@jpt[[i]]
         result <- marginalize.discrete(pot, allvar)
         result <- conditional(result, parents)
@@ -89,7 +89,7 @@ FactorQuery <- function(tree, vars=c(), mode=c("joint", "conditional", "list")) 
 
   if (mode=="joint") {
     for (i in 1:length(tree@jpt)) {
-      if(is.subset(vars, colnames(tree@jpt[[i]]$cpt))) {
+      if(all(vars %in% colnames(tree@jpt[[i]]$cpt))) {
         pot <- tree@jpt[[i]]
         result <- marginalize.discrete(pot, vars)
         output <- data.frame(result$cpt, prob=result$prob)

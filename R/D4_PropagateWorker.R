@@ -38,24 +38,23 @@ propagate.worker <- function(tree.graph, potentials, cluster.sets, targets = NA)
   }
 }
 
+###################################################
+
 propagate.worker_orig <- function(tree.graph, potentials, cluster.sets){
-
+  
   # tree.graph <- tree.sub.graph; potentials <- potentials.sub; cluster.sets <- discrete.sets
-
   cluster.tree <- list(
     # bn=dag,
     tree=tree.graph,
     clusters=cluster.sets,
     # assignment=asgn,
     collected=c(), active=c(), potentials=potentials, joint=potentials)
-
+  
   clusters <- names(potentials)
   result <- list()
-
+  
   ## NEW version of getting joints
-
-   # print(clusters[1])
-
+  
   # collect
   ce <- CollectEvidence(cluster.tree, clusters[1])
   # reset active nodes
@@ -63,11 +62,9 @@ propagate.worker_orig <- function(tree.graph, potentials, cluster.sets){
   # distribute
   de <- DistributeEvidence(ce, clusters[1])
   result <- de$joint
-
+  
   return(result)
 }
-
-# ppgt <- Propagate(tree.sub.graph, potentials.sub, discrete.sets)
 
 ###################################################
 

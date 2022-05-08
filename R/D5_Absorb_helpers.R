@@ -5,7 +5,7 @@
 
 substituteEvidence <- function(lppot, vars, vals)
 {
-  if(!is.subset(vars, lppot@tail)) {
+  if(!all(vars %in% lppot@tail)) {
     stop("The variables are not a subset of the lppotential's tail.")
   }
   

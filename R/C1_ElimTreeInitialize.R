@@ -129,7 +129,7 @@ ElimTreeInitialize <- function(tree, dag, model, node.sets, node.class){
       for (j in 1:length(continuous.clusters)) {
         this.cluster <- continuous.clusters[j]
         this.member <- ClusterTree@member[[this.cluster]]
-        if (is.subset(this.all, this.member)) {
+        if (all(this.all %in% this.member)) {
           if(this.node==this.cluster){
             l <- length(ClusterTree@lppotential[[j]])
             ClusterTree@lppotential[[j]][[l+1]] <- model$bags[[this.node]]

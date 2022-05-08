@@ -45,12 +45,12 @@ ClusterTreeCompile <- function(dag, node.class) {
   elim.order <- EliminationOrder(dag, node.class=node.class)
   graph.mor <- Moralize(dag)
   graph.tri <- Triangulate(graph.mor, elim.order)
-  cs <- ElimTreeNodes(graph.tri, elim.order)
-  strongET <- StrongEliminationTree(cs, elim.order)
-  semiET <- SemiEliminationTree(strongET, cs, node.class, elim.order)
+  csets <- ElimTreeNodes(graph.tri, elim.order)
+  strongET <- StrongEliminationTree(csets, elim.order)
+  semiET <- SemiEliminationTree(strongET, csets, node.class, elim.order)
   output <- list(tree.graph=semiET,
                  dag=dag,
-                 cluster.sets=cs,
+                 cluster.sets=csets,
                  node.class=node.class,
                  elimination.order=elim.order)
   return(output)

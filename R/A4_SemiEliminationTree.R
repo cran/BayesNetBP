@@ -1,7 +1,5 @@
 #' @importFrom igraph igraph.from.graphNEL
-SemiEliminationTree <- function(graph, cs, node.class, elim.order){
-
-  cluster.sets <- cs
+SemiEliminationTree <- function(graph, cluster.sets, node.class, elim.order){
   cs.graph <- igraph.from.graphNEL(graph)
   i <- 1
 
@@ -13,17 +11,16 @@ SemiEliminationTree <- function(graph, cs, node.class, elim.order){
     this.name <- cs.names[i]
     this.parent <- neighbors(cs.graph, v=this.name, mode="in")$name
 
-    subset <- FALSE
+    find_cluster <- FALSE
     is.discrete <- prod(node.class[cluster]) # if this cluster is dicrete (all members are discete)
     if (is.discrete){
       # if it's discrete, search for the following clusters
       for(j in (i+1):length(cluster.sets)){
         if (prod(node.class[cluster.sets[[j]]])){
           # if jth cluster is discrete
-          if (is.subset(cluster, cluster.sets[[j]])){
-            # and it contains this cluster
-            subset <-  TRUE
-            # set the indicator true
+          if (all(cluster %in% cluster.sets[[j]])){
+            # and it contains this cluster, set the indicator true
+            find_cluster <-  TRUE
             break
             # stop searching
           }
@@ -32,10 +29,7 @@ SemiEliminationTree <- function(graph, cs, node.class, elim.order){
     }
 
     # if can not found such a cluster j, then proceed to next iteration
-    if(!subset){
-      i <- i+1
-      next
-    }
+    if(!find_cluster){i <- i+1; next}
 
     # if such cluster j is found, do the following:
 
@@ -52,15 +46,13 @@ SemiEliminationTree <- function(graph, cs, node.class, elim.order){
       this.child <- cluster.children[[j]]
       child.mem <- cluster.sets[[this.child]]
       is.discrete <- prod(node.class[child.mem])
-      if (is.discrete & is.subset(cluster, child.mem)) {
+      if (is.discrete & all(cluster %in% child.mem)) {
         this.scan <- which(elim.order == cs.names[i])
 
         # if the elimination node of this child appears later
         # then update the selected child
         if(this.scan > current){
-
           current <- this.scan ##
-
           selected.child <- j;
           selected.child.name <- cluster.children[j]
         }
@@ -107,12 +99,4 @@ SemiEliminationTree <- function(graph, cs, node.class, elim.order){
 
   return(igraph.to.graphNEL(cs.graph))
 
-}
-
-is.subset <- function(x,y){
-  if (length(setdiff(x,y))==0){
-    return(TRUE)
-  } else {
-    return(FALSE)
-  }
 }
